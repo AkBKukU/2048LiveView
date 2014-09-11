@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">2048 LiveView</string>
+    <!-- 
+    	The following strings needs to be defined in order for the Plugin to function.
+    -->
+    <string name="pluginname">2048</string>
+    <string name="intent_preferences">org.akbkuku.game2048LiveView.PREFERENCES</string>
+    <string name="intent_service">org.akbkuku.game2048LiveView.sandboxpluginservice</string>
+    <string name="application_description">Extends:com.sonyericsson.extras.liveview</string>
+</resources>

@@ -1,0 +1,10 @@
+<PreferenceScreen	xmlns:android="http://schemas.android.com/apk/res/android"	
+					android:title="@string/app_name">
+	<CheckBoxPreference android:key="pluginEnabled"
+	                	android:title="Enabled"
+	                	android:order = "0"
+	                	android:defaultValue = "false"/>
+	<!--
+		Add your additional preferences here.
+	-->
+</PreferenceScreen>

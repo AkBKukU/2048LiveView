@@ -1,0 +1,4 @@
+Performance improvments
+
+1: Draw only hen needed
+	Keep what the screen curently has drawn in a var and compare to what to draw. Only draw things that have changed.

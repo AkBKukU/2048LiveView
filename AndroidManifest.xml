@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+      package="org.akbkuku.game2048LiveView"
+      android:versionCode="1"
+      android:versionName="1.0">
+    <application android:icon="@drawable/icon" android:label="@string/app_name" android:description="@string/application_description">
+        <service android:name="org.akbkuku.game2048LiveView.SandboxPluginService"
+				 android:label="Sandbox plugin service">
+			<intent-filter>
+				<action android:name="org.akbkuku.game2048LiveView.sandboxpluginservice"/>
+				<category android:name="android.intent.category.LAUNCHER"/>
+			</intent-filter>
+        </service>
+        <activity android:name="com.sonyericsson.extras.liveview.plugins.PluginPreferences" 
+				  android:label="Sandbox plugin preferences">
+			<intent-filter>
+				<action android:name="org.akbkuku.game2048LiveView.PREFERENCES"></action> 	
+				<category android:name="android.intent.category.DEFAULT"/>
+			</intent-filter>
+        </activity>
+	    <receiver android:name="com.sonyericsson.extras.liveview.plugins.PluginReceiver">
+			<intent-filter>
+				<action android:name="com.sonyericsson.extras.liveview.LAUNCH_PLUGIN" />
+			</intent-filter>
+	    </receiver>
+    </application>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-sdk android:minSdkVersion="4" />
+</manifest>
