@@ -53,11 +53,16 @@ public final class PluginConstants {
     public static final String LOG_TAG = "LiveViewPlugin";
     
     // Buttons
-    public static final String BUTTON_UP = "up";
-    public static final String BUTTON_DOWN = "down";
-    public static final String BUTTON_RIGHT = "right";
-    public static final String BUTTON_LEFT = "left";
-    public static final String BUTTON_SELECT = "select";
+    public static final String BUTTON_UP = "UP";
+    public static final String BUTTON_DOWN = "DOWN";
+    public static final String BUTTON_RIGHT = "RIGHT";
+    public static final String BUTTON_LEFT = "LEFT";
+    public static final String BUTTON_SELECT = "SELECT";
+
+    // Rumble Lengths
+    public static final int RUMBLE_SHORT = 50;
+    public static final int RUMBLE_MEDIUM = 250;
+    public static final int RUMBLE_LONG = 500;
     
     // LiveView screen sizes
     public static final int LIVEVIEW_SCREEN_X = 128;

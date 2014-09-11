@@ -1,5 +1,7 @@
 package org.akbkuku.game2048LiveView;
 
+import java.util.Random;
+
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -8,12 +10,26 @@ import com.sonyericsson.extras.liveview.plugins.LiveViewAdapter;
 
 public class GameBoard {
 	
+	public static final String
+		UP="UP",
+		DOWN="DOWN",
+		LEFT="LEFT",
+		RIGHT="RIGHT";
+		
+	
 	public static int gridPX[][][] = {
 		{{5,5},{35,5},{65,5},{95,5}},
 		{{5,35},{35,35},{65,35},{95,35}},
 		{{5,65},{35,65},{65,65},{95,65}},
 		{{5,95},{35,95},{65,95},{95,95}}
 		};
+
+	private final static int emptyBoard[][] = {
+			{0,0,0,0},
+			{0,0,0,0},
+			{0,0,0,0},
+			{0,0,0,0}
+			};  
 	
 	protected int boardValues[][] = {
 			{0,0,256,0},
@@ -34,6 +50,7 @@ public class GameBoard {
 		this.mPluginId = mPluginId;
 		this.context = context;
 		
+		//newGame();
 
 	    // Get bitmaps
 		background = BitmapFactory.decodeStream(context.getResources().openRawResource(R.drawable.background));
@@ -41,6 +58,7 @@ public class GameBoard {
 	
 	public void drawBoard()
 	{
+		newGame();
         mLiveViewAdapter.sendImageAsBitmap(mPluginId, 0, 0, background);
 		for (int x=0;x < 4;x++)
 		{
@@ -55,6 +73,51 @@ public class GameBoard {
 			}
 		}
 	}
+	
+	public void newGame()
+	{
+		boardValues = emptyBoard;  
+		
+		addPiece();
+		addPiece();
+	}
+	
+	private void addPiece()
+	{
+	    Random rand = new Random();
+	    int xPos,
+	    	yPos,
+	    	chance,
+	    	value;
+	    
+		boolean notAdded = true;
+		while(notAdded)
+		{
+			xPos = rand.nextInt(4);
+			yPos = rand.nextInt(4);
+			if (boardValues[xPos][yPos] != 0)
+			{
+				chance = rand.nextInt(11);
+				if (chance == 10)
+				{
+					value = 4;
+				}
+				else
+				{
+					value = 2;
+				}
+				
+				boardValues[xPos][yPos] = value;
+			}
+			
+		}
+	}
+	
+	public void slide(String direction)
+	{
+		
+	}
+	
 	
 	private Bitmap getBitmap(int value)
 	{
