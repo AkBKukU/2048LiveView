@@ -151,6 +151,7 @@ public class SandboxPluginService extends AbstractPluginService {
 	protected void stopPlugin() {
 		Log.d(PluginConstants.LOG_TAG, "stopPlugin");
 		stopWork();
+		board.reset();
 	}
 
 	

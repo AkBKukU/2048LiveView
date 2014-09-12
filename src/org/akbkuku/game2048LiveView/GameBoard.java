@@ -1,12 +1,16 @@
 package org.akbkuku.game2048LiveView;
 
+import java.lang.reflect.Array;
+import java.util.ArrayList;
 import java.util.Random;
 
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.util.Log;
 
 import com.sonyericsson.extras.liveview.plugins.LiveViewAdapter;
+import com.sonyericsson.extras.liveview.plugins.PluginConstants;
 
 public class GameBoard {
 	
@@ -37,6 +41,8 @@ public class GameBoard {
 			{0,0,2,4},
 			{0,0,32,0}
 			};  
+	
+	ArrayList<int[]> empties = new ArrayList<int[]>();
 	LiveViewAdapter mLiveViewAdapter;
 	int mPluginId;
 	Context context;
@@ -50,7 +56,7 @@ public class GameBoard {
 		this.mPluginId = mPluginId;
 		this.context = context;
 		
-		//newGame();
+		newGame();
 
 	    // Get bitmaps
 		background = BitmapFactory.decodeStream(context.getResources().openRawResource(R.drawable.background));
@@ -76,41 +82,71 @@ public class GameBoard {
 	
 	public void newGame()
 	{
-		boardValues = emptyBoard;  
-		
+	    Log.d(PluginConstants.LOG_TAG_GAME, "--New Game--");
+		reset();
 		addPiece();
 		addPiece();
 	}
 	
-	private void addPiece()
+	public void reset()
 	{
+	    Log.d(PluginConstants.LOG_TAG_GAME, "Clearing Board");		
+		// Set all spaces to empty
+		empties.clear();
+		for (int x=0;x < 4;x++)
+		{
+
+			for (int y=0;y < 4;y++)
+			{
+				int[] loc = {x,y};
+				boardValues[x][y] = 0;
+				empties.add(loc);
+			}
+			
+		}
+		
+	}
+	
+	private boolean addPiece()
+	{
+	    Log.d(PluginConstants.LOG_TAG_GAME, "Adding new piece");
+		
+		// Check for empty spaces
+		if ( empties.size() == 0 )
+		{
+		    Log.d(PluginConstants.LOG_TAG_GAME, "Out of empty Spaces");
+			return false;
+		}
+		
 	    Random rand = new Random();
-	    int xPos,
-	    	yPos,
+	    int emptyToFill,
 	    	chance,
 	    	value;
 	    
 		boolean notAdded = true;
 		while(notAdded)
 		{
-			xPos = rand.nextInt(4);
-			yPos = rand.nextInt(4);
-			if (boardValues[xPos][yPos] != 0)
+		    Log.d(PluginConstants.LOG_TAG_GAME, "New piece not added yet");
+			emptyToFill = rand.nextInt(empties.size());
+			
+			chance = rand.nextInt(11);
+			if (chance == 10)
 			{
-				chance = rand.nextInt(11);
-				if (chance == 10)
-				{
-					value = 4;
-				}
-				else
-				{
-					value = 2;
-				}
-				
-				boardValues[xPos][yPos] = value;
+				value = 4;
+			}
+			else
+			{
+				value = 2;
 			}
 			
+			boardValues[empties.get(emptyToFill)[0]][empties.get(emptyToFill)[1]] = value;
+			empties.remove(emptyToFill);
+			notAdded = false;
+		    Log.d(PluginConstants.LOG_TAG_GAME, "New piece added");
+			
+			
 		}
+		return true;
 	}
 	
 	public void slide(String direction)

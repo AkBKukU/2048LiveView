@@ -51,6 +51,7 @@ public final class PluginConstants {
     
     // Log tag
     public static final String LOG_TAG = "LiveViewPlugin";
+    public static final String LOG_TAG_GAME = "GameBoard";
     
     // Buttons
     public static final String BUTTON_UP = "UP";
