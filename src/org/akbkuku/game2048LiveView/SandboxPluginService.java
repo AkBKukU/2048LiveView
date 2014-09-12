@@ -194,29 +194,30 @@ public class SandboxPluginService extends AbstractPluginService {
 	    Log.d(PluginConstants.LOG_TAG, "button - type " + buttonType + ", doublepress " + doublepress + ", longpress " + longpress);
 		
 	    
-		if(buttonType.equals(PluginConstants.BUTTON_UP)) 
+		if(buttonType.equalsIgnoreCase(PluginConstants.BUTTON_UP)) 
 		{
 			board.slide(GameBoard.UP);
             board.drawBoard();
 		}
-		else if(buttonType.equals(PluginConstants.BUTTON_DOWN)) 
+		else if(buttonType.equalsIgnoreCase(PluginConstants.BUTTON_DOWN)) 
 		{
 			board.slide(GameBoard.DOWN);
             board.drawBoard();
 		} 
-		else if(buttonType.equals(PluginConstants.BUTTON_LEFT)) 
+		else if(buttonType.equalsIgnoreCase(PluginConstants.BUTTON_LEFT)) 
 		{
 			board.slide(GameBoard.LEFT);
             board.drawBoard();
 		} 
-		else if(buttonType.equals(PluginConstants.BUTTON_RIGHT)) 
+		else if(buttonType.equalsIgnoreCase(PluginConstants.BUTTON_RIGHT)) 
 		{
 			board.slide(GameBoard.RIGHT);
             board.drawBoard();
 		} 
-		else if(buttonType.equals(PluginConstants.BUTTON_SELECT)) 
+		else if(buttonType.equalsIgnoreCase(PluginConstants.BUTTON_SELECT)) 
 		{
             rumble(PluginConstants.RUMBLE_SHORT);
+            board.newGame();
             board.drawBoard();
 		}
 	}

@@ -14,11 +14,11 @@ import com.sonyericsson.extras.liveview.plugins.PluginConstants;
 
 public class GameBoard {
 	
-	public static final String
-		UP="UP",
-		DOWN="DOWN",
-		LEFT="LEFT",
-		RIGHT="RIGHT";
+	public static final int
+		UP=0,
+		DOWN=1,
+		LEFT=2,
+		RIGHT=3;
 		
 	
 	public static int gridPX[][][] = {
@@ -28,13 +28,6 @@ public class GameBoard {
 		{{5,95},{35,95},{65,95},{95,95}}
 		};
 
-	private final static int emptyBoard[][] = {
-			{0,0,0,0},
-			{0,0,0,0},
-			{0,0,0,0},
-			{0,0,0,0}
-			};  
-	
 	protected int boardValues[][] = {
 			{0,0,256,0},
 			{2048,0,2,0},
@@ -64,16 +57,15 @@ public class GameBoard {
 	
 	public void drawBoard()
 	{
-		newGame();
         mLiveViewAdapter.sendImageAsBitmap(mPluginId, 0, 0, background);
 		for (int x=0;x < 4;x++)
 		{
 
 			for (int y=0;y < 4;y++)
 			{
-				if (boardValues[x][y] != 0)
+				if (boardValues[y][x] != 0)
 				{
-                    mLiveViewAdapter.sendImageAsBitmap(mPluginId, GameBoard.gridPX[x][y][0],GameBoard.gridPX[x][y][1], getBitmap(boardValues[x][y]));
+                    mLiveViewAdapter.sendImageAsBitmap(mPluginId, GameBoard.gridPX[y][x][0],GameBoard.gridPX[y][x][1], getBitmap(boardValues[y][x]));
 					
 				}
 			}
@@ -92,25 +84,44 @@ public class GameBoard {
 	{
 	    Log.d(PluginConstants.LOG_TAG_GAME, "Clearing Board");		
 		// Set all spaces to empty
-		empties.clear();
+	    getEmpties();
 		for (int x=0;x < 4;x++)
 		{
 
 			for (int y=0;y < 4;y++)
 			{
-				int[] loc = {x,y};
-				boardValues[x][y] = 0;
-				empties.add(loc);
+				boardValues[y][x] = 0;
 			}
 			
 		}
 		
 	}
 	
+	private void getEmpties()
+	{
+
+	    Log.d(PluginConstants.LOG_TAG_GAME, "Getting Empty Spaces");		
+		empties.clear();
+		for (int x=0;x < 4;x++)
+		{
+
+			for (int y=0;y < 4;y++)
+			{
+				if (boardValues[y][x] == 0)
+				{
+					int[] loc = {y,x};
+					empties.add(loc);
+				}
+			}
+			
+		}
+	}
+	
 	private boolean addPiece()
 	{
 	    Log.d(PluginConstants.LOG_TAG_GAME, "Adding new piece");
 		
+	    getEmpties();
 		// Check for empty spaces
 		if ( empties.size() == 0 )
 		{
@@ -130,7 +141,7 @@ public class GameBoard {
 			emptyToFill = rand.nextInt(empties.size());
 			
 			chance = rand.nextInt(11);
-			if (chance == 10)
+			if (chance > 8)
 			{
 				value = 4;
 			}
@@ -149,8 +160,75 @@ public class GameBoard {
 		return true;
 	}
 	
-	public void slide(String direction)
+	public void slide(int direction)
 	{
+		switch (direction)
+		{
+			case GameBoard.UP:
+			    Log.d(PluginConstants.LOG_TAG_GAME, "Slide Up");		
+				moveAll(0,-1);
+				break;
+			case GameBoard.DOWN:
+			    Log.d(PluginConstants.LOG_TAG_GAME, "Slide Down");	
+				moveAll(0,1);
+				break;
+			case GameBoard.LEFT:
+			    Log.d(PluginConstants.LOG_TAG_GAME, "Slide Left");	
+				moveAll(-1,0);
+				break;
+			case GameBoard.RIGHT:
+			    Log.d(PluginConstants.LOG_TAG_GAME, "Slide Right");	
+				moveAll(1,0);
+				break;
+		}
+		//TODO - Need to test that a move was made before adding
+		addPiece();
+	}
+	
+	private void moveAll(int xM, int yM)
+	{
+		for (int x=0;x < 4;x++)
+		{
+
+			for (int y=0;y < 4;y++)
+			{
+				// Check if empty
+				if(boardValues[y][x] != 0)
+				{
+					
+					
+					int tx = x,
+						ty=y;
+					boolean stillMoving = true;
+					while(stillMoving)
+					{
+						if((tx+xM>-1 && tx+xM<4) && (ty+yM>-1 && ty+yM<4) && boardValues[ty+yM][tx+xM] == 0  )
+						{
+							boardValues[ty+yM][tx+xM] = boardValues[ty][tx];
+							boardValues[ty][tx] = 0;
+							tx=tx+xM;
+							ty=ty+yM;
+							
+						}
+						else if((tx+xM>-1 && tx+xM<4) && (ty+yM>-1 && ty+yM<4) && boardValues[ty+yM][tx+xM] == boardValues[ty][tx]  )
+						{
+
+						    Log.d(PluginConstants.LOG_TAG_GAME, "Merging ("+(ty)+","+(tx)+") with ("+(ty+yM)+","+(tx+xM)+") to create a: "+boardValues[ty][tx]*2);	
+							boardValues[ty+yM][tx+xM] = boardValues[ty][tx]*2;
+							boardValues[ty][tx] = 0;
+							tx=tx+xM;
+							ty=ty+yM;
+							
+						}
+						else
+						{
+							stillMoving = false;
+						}
+					}
+				}
+			}
+			
+		}
 		
 	}
 	
