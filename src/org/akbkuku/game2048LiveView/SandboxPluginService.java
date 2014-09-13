@@ -31,20 +31,10 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.res.AssetManager;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Handler;
 import android.os.IBinder;
-import android.os.Message;
 import android.os.RemoteException;
 import android.util.Log;
-
-import java.io.IOException;
-import java.text.Format;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-
 public class SandboxPluginService extends AbstractPluginService {
     
 	Context context = this;
@@ -55,11 +45,7 @@ public class SandboxPluginService extends AbstractPluginService {
     // Our handler.
     private Handler mHandler = null;
     
-
-    // Get bitmaps
-    Bitmap background = null;
-    Bitmap t32 = null;
-    
+    // Game Logic
     GameBoard board = null;
 	
     /**
@@ -142,16 +128,25 @@ public class SandboxPluginService extends AbstractPluginService {
 	protected void onSharedPreferenceChangedExtended(SharedPreferences prefs, String key) {
 		
 	}
-
+	
+	/**
+	 * startPlugin
+	 * 
+	 *  Starts when plugin is loaded
+	 */
 	protected void startPlugin() {
 		Log.d(PluginConstants.LOG_TAG, "startPlugin");
 		startWork();
 	}
-			
+
+	/**
+	 * stopPlugin
+	 * 
+	 *  Starts when plugin is unloaded
+	 */	
 	protected void stopPlugin() {
 		Log.d(PluginConstants.LOG_TAG, "stopPlugin");
 		stopWork();
-		board.reset();
 	}
 
 	
@@ -171,6 +166,8 @@ public class SandboxPluginService extends AbstractPluginService {
                     } catch(Exception e) {
                         Log.e(PluginConstants.LOG_TAG, "Failed to clear display.");
                     }
+                    
+                    //TODO - Impliment menu here
                     board.drawBoard();
                 }
             }, 100);
@@ -185,6 +182,7 @@ public class SandboxPluginService extends AbstractPluginService {
 	protected void stopWork() {
 		stopUpdates();
 	}
+	
 	/**
 	 * button
 	 * 
@@ -248,10 +246,18 @@ public class SandboxPluginService extends AbstractPluginService {
         }
     }
     
+    /**
+     * rumble
+     * 
+     * A more intuitive interface for controlling the vibration motor.
+     * 
+     * @param duration Takes: PluginConstants.RUMBLE_SHORT, PluginConstants.RUMBLE_MEDIUM, or PluginConstants.RUMBLE_LONG
+     */
     public void rumble(int duration)
     {
         mLiveViewAdapter.vibrateControl(mPluginId, 0, duration);
     }
+    
     
     private void stopUpdates() {
     }
