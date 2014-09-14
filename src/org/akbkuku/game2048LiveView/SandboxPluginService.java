@@ -168,7 +168,7 @@ public class SandboxPluginService extends AbstractPluginService {
                     }
                     
                     //TODO - Impliment menu here
-                    board.drawBoard();
+                    board.draw();
                 }
             }, 100);
         }
@@ -195,28 +195,28 @@ public class SandboxPluginService extends AbstractPluginService {
 		if(buttonType.equalsIgnoreCase(PluginConstants.BUTTON_UP)) 
 		{
 			board.slide(GameBoard.UP);
-            board.drawBoard();
+            board.draw();
 		}
 		else if(buttonType.equalsIgnoreCase(PluginConstants.BUTTON_DOWN)) 
 		{
 			board.slide(GameBoard.DOWN);
-            board.drawBoard();
+            board.draw();
 		} 
 		else if(buttonType.equalsIgnoreCase(PluginConstants.BUTTON_LEFT)) 
 		{
 			board.slide(GameBoard.LEFT);
-            board.drawBoard();
+            board.draw();
 		} 
 		else if(buttonType.equalsIgnoreCase(PluginConstants.BUTTON_RIGHT)) 
 		{
 			board.slide(GameBoard.RIGHT);
-            board.drawBoard();
+            board.draw();
 		} 
 		else if(buttonType.equalsIgnoreCase(PluginConstants.BUTTON_SELECT)) 
 		{
             rumble(PluginConstants.RUMBLE_SHORT);
             board.newGame();
-            board.drawBoard();
+            board.draw();
 		}
 	}
 

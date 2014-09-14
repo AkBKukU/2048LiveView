@@ -11,7 +11,7 @@ import android.util.Log;
 import com.sonyericsson.extras.liveview.plugins.LiveViewAdapter;
 import com.sonyericsson.extras.liveview.plugins.PluginConstants;
 
-public class GameBoard {
+public class GameBoard extends LiveViewActivity{
 	
 	// Ints for direction to be used with a switch statement
 	public static final int
@@ -39,11 +39,6 @@ public class GameBoard {
 	// Arraylist to keep a quick array of empty locations on the board to make adding new pieces easier
 	ArrayList<int[]> empties = new ArrayList<int[]>();
 	
-	// Current Running Info
-	LiveViewAdapter mLiveViewAdapter;
-	int mPluginId;
-	Context context;
-	
 	// Bitmaps
 	Bitmap background;
 
@@ -58,10 +53,7 @@ public class GameBoard {
 	 */
 	public GameBoard(LiveViewAdapter mLiveViewAdapter, int mPluginId, Context context)
 	{
-		this.mLiveViewAdapter = mLiveViewAdapter;
-		this.mPluginId = mPluginId;
-		this.context = context;
-		
+		super(mLiveViewAdapter, mPluginId, context);
 		newGame();
 
 	    // Get bitmaps
@@ -69,11 +61,12 @@ public class GameBoard {
 	}
 	
 	/**
-	 * drawBoard
+	 * draw
 	 * 
 	 * Draws current pieces to the LiveView's screen
 	 */
-	public void drawBoard()
+	@Override
+	public void draw()
 	{
 		// Print Background
         mLiveViewAdapter.sendImageAsBitmap(mPluginId, 0, 0, background);
@@ -422,4 +415,5 @@ public class GameBoard {
 		// Return background if used wrong
 		return background;
 	}
+
 }
