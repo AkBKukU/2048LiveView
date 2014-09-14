@@ -1,6 +1,6 @@
 /*
  * This file is auto-generated.  DO NOT MODIFY.
- * Original file: /home/akbkuku/projects/AkBKukU/2048LiveView/src/com/sonyericsson/extras/liveview/IPluginServiceV1.aidl
+ * Original file: /home/akbkuku/Projects/2048LiveView/src/com/sonyericsson/extras/liveview/IPluginServiceV1.aidl
  */
 package com.sonyericsson.extras.liveview;
 public interface IPluginServiceV1 extends android.os.IInterface
