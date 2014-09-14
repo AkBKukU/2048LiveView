@@ -255,70 +255,113 @@ public class GameBoard {
 	/**
 	 * moveAll
 	 * 
-	 * Applies the direction indicated by the X and Y change supplied
+	 * Applies the direction indicated by the X and Y change supplied. It moves through the array from the side it's moving to 
 	 * 
 	 * @param xM Amount to shift horizontally
 	 * @param yM Amount to shift vertically
 	 */
 	private void moveAll(int xM, int yM)
 	{
-		for (int x=0;x < 4;x++)
+		if (xM == 1 && yM == 0)
 		{
-			for (int y=0;y < 4;y++)
+			for (int x=3;x > -1;x--)
 			{
-				// Check if empty
-				if(boardValues[y][x] != 0)
+				for (int y=0;y < 4;y++)
 				{
-					// Save pieces current location, is modified to move more than one space
-					int tx = x,
-						ty=y;
-					
-					// Loop until the pieces path is blocked
-					boolean stillMoving = true;
-					while(stillMoving)
-					{
-						// Test if the piece is at the edge of the board
-						if ((tx+xM>-1 && tx+xM<4) && (ty+yM>-1 && ty+yM<4))
-						{
-							// Test if the next location is empty
-							if( boardValues[ty+yM][tx+xM] == 0  )
-							{
-								// Move value to next location
-								boardValues[ty+yM][tx+xM] = boardValues[ty][tx];
-								boardValues[ty][tx] = 0;
-								tx=tx+xM;
-								ty=ty+yM;
-							}
-							
-							// If the next location it not empty, test if it's the same value
-							else if( boardValues[ty+yM][tx+xM] == boardValues[ty][tx]  )
-							{
-								// Merge value with next location
-							    Log.d(PluginConstants.LOG_TAG_GAME, "Merging ("+(ty)+","+(tx)+") with ("+(ty+yM)+","+(tx+xM)+") to create a: "+boardValues[ty][tx]*2);	
-								boardValues[ty+yM][tx+xM] = boardValues[ty][tx]*2;
-								boardValues[ty][tx] = 0;
-								tx=tx+xM;
-								ty=ty+yM;
-								
-							}
-							
-							// Stop Moving
-							else
-							{
-								stillMoving = false;
-							}
-						}
-						// Never Move
-						else
-						{
-							stillMoving = false;
-						}
-					}
+					moveOne (x, y, xM,  yM);
 				}
+				
 			}
-			
+		}
+		else if (xM == -1 && yM == 0)
+		{
+			for (int x=0;x < 4;x++)
+			{
+				for (int y=0;y < 4;y++)
+				{
+					moveOne (x, y, xM,  yM);
+				}
+				
+			}
+		}
+		else if (xM == 0 && yM == -1)
+		{
+			for (int x=3;x > -1;x--)
+			{
+				for (int y=0;y < 4;y++)
+				{
+					moveOne (x, y, xM,  yM);
+				}
+				
+			}
+		}
+		else if (xM == 0 && yM == 1)
+		{
+			for (int x=0;x < 4;x++)
+			{
+				for (int y=3;y > -1;y--)
+				{
+					moveOne (x, y, xM,  yM);
+				}
+				
+			}
 		}
 		
+	}
+	
+	private void moveOne (int x, int y, int xM, int yM)
+	{
+		// Check if empty
+		if(boardValues[y][x] != 0)
+		{
+			// Save pieces current location, is modified to move more than one space
+			int tx = x,
+				ty=y;
+			
+			// Loop until the pieces path is blocked
+			boolean stillMoving = true;
+			while(stillMoving)
+			{
+				// Test if the piece is at the edge of the board
+				if ((tx+xM>-1 && tx+xM<4) && (ty+yM>-1 && ty+yM<4))
+				{
+					// Test if the next location is empty
+					if( boardValues[ty+yM][tx+xM] == 0  )
+					{
+						// Move value to next location
+						boardValues[ty+yM][tx+xM] = boardValues[ty][tx];
+						boardValues[ty][tx] = 0;
+						tx=tx+xM;
+						ty=ty+yM;
+					}
+					
+					// If the next location it not empty, test if it's the same value
+					else if( boardValues[ty+yM][tx+xM] == boardValues[ty][tx]  )
+					{
+						// Merge value with next location
+					    Log.d(PluginConstants.LOG_TAG_GAME, "Merging ("+(ty)+","+(tx)+") with ("+(ty+yM)+","+(tx+xM)+") to create a: "+boardValues[ty][tx]*2);	
+						boardValues[ty+yM][tx+xM] = boardValues[ty][tx]*2;
+						boardValues[ty][tx] = 0;
+						tx=tx+xM;
+						ty=ty+yM;
+						
+						stillMoving = false;
+						
+					}
+					
+					// Stop Moving
+					else
+					{
+						stillMoving = false;
+					}
+				}
+				// Never Move
+				else
+				{
+					stillMoving = false;
+				}
+			}
+		}
 	}
 	
 	/**
