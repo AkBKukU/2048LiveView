@@ -3,8 +3,10 @@ package org.akbkuku.game2048LiveView;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.Paint;
+import android.graphics.Paint.Align;
 
 import com.sonyericsson.extras.liveview.plugins.AbstractPluginService;
 import com.sonyericsson.extras.liveview.plugins.LiveViewAdapter;
@@ -50,6 +52,23 @@ public class MainMenu extends LiveViewActivity {
 	public void buildImage() {
 
 		canvas.drawBitmap(menuBackground, 0, 0, paint);
+
+
+	    Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
+
+
+		paint.setColor(Color.WHITE); 
+		paint.setTextAlign(Align.CENTER);
+		paint.setTextSize(18); 
+		String startText = "Start";
+		if (SandboxPluginService.score != 0)
+		{
+			startText = "Resume";
+		}
+		canvas.drawText(startText, 64, 69, paint);
+		canvas.drawText("Scores", 64, 106, paint);
+	    
+		// TODO Auto-generated method stub 
 		
 		canvas.drawBitmap(currentSelector, 4, 60, paint);
 		canvas.drawBitmap(currentSelector, 112, 60, paint);

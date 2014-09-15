@@ -14,9 +14,9 @@ public final class R {
         public static final int background=0x7f020000;
         public static final int demo=0x7f020001;
         public static final int icon=0x7f020002;
-        public static final int icon_small=0x7f020003;
-        public static final int menu_background=0x7f020004;
-        public static final int menu_select=0x7f020005;
+        public static final int menu_background=0x7f020003;
+        public static final int menu_select=0x7f020004;
+        public static final int scores_background=0x7f020005;
         public static final int t0=0x7f020006;
         public static final int t1024=0x7f020007;
         public static final int t128=0x7f020008;

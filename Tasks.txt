@@ -1,5 +1,19 @@
-Performance improvments
-
+DONE
 1: Write bitmaps to canvas to only send one image to liveview for perfect performace
 Bitmap b = Bitmap.createBitmap(100, 100, Bitmap.Config.ARGB_8888);
 Canvas c = new Canvas(b);
+
+2: Use value/strings.xml
+Be PC! Use stings sheet to allow translations
+
+
+TODO!
+
+DONE - Save High Score
+DONE* - Make Tiles easier to read
+fix game end
+only add new pieces when change was made
+
+
+
+Biggest problem was 2 & 4 but I had them set to the wrong colors.

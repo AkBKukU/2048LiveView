@@ -38,7 +38,9 @@ import android.util.Log;
 public class SandboxPluginService extends AbstractPluginService {
     
 	Context context = this;
-	
+
+	SharedPreferences sharedPref;
+	SharedPreferences.Editor editor;
 	
 	private enum workers 
 	{
@@ -57,7 +59,8 @@ public class SandboxPluginService extends AbstractPluginService {
     MainMenu mMenu = null;
     ScoreViewer scoreView = null;
 
-    public static int score = 0;
+    public static int score = 0,
+    				highScore = 0;
 	
     /**
      * First Start Stage
@@ -82,6 +85,10 @@ public class SandboxPluginService extends AbstractPluginService {
 		if(mHandler == null) {
 		    mHandler = new Handler();
 		}
+		sharedPref = context.getSharedPreferences("org.akbkuku.highScore", Context.MODE_PRIVATE);
+		editor = sharedPref.edit();
+		score = 0;
+		highScore = sharedPref.getInt("high_score", highScore);
 		
 		// Load game board
 		LiveViewActivity.setup(context);
@@ -191,6 +198,14 @@ public class SandboxPluginService extends AbstractPluginService {
 	protected void button(String buttonType, boolean doublepress, boolean longpress) {
 	    Log.d(PluginConstants.LOG_TAG, "button - type " + buttonType + ", doublepress " + doublepress + ", longpress " + longpress);
 		
+	    //Check high score
+	    if (score > highScore)
+	    {
+	    	editor.putInt("high_score", score);
+	    	editor.commit();
+	    	highScore = score;
+	    }
+	    
 	    switch(currentWorker)
 	    {
 	    case MAINMENU:
