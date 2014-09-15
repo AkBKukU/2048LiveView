@@ -333,7 +333,9 @@ public class GameBoard extends LiveViewActivity{
 					{
 						// Merge value with next location
 					    Log.d(PluginConstants.LOG_TAG_GAME, "Merging ("+(ty)+","+(tx)+") with ("+(ty+yM)+","+(tx+xM)+") to create a: "+boardValues[ty][tx]*2);	
-						boardValues[ty+yM][tx+xM] = boardValues[ty][tx]*2;
+						SandboxPluginService.score=SandboxPluginService.score + boardValues[ty][tx]*2;
+					    
+					    boardValues[ty+yM][tx+xM] = boardValues[ty][tx]*2;
 						boardValues[ty][tx] = 0;
 						tx=tx+xM;
 						ty=ty+yM;

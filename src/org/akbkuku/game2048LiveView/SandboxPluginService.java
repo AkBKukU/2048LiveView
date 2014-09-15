@@ -43,7 +43,8 @@ public class SandboxPluginService extends AbstractPluginService {
 	private enum workers 
 	{
 		MAINMENU,
-		GAMEBOARD
+		GAMEBOARD,
+		SCOREVIEW
 	}
 	
 	private workers currentWorker = workers.MAINMENU;
@@ -54,6 +55,9 @@ public class SandboxPluginService extends AbstractPluginService {
     // Game Logic
     GameBoard board = null;
     MainMenu mMenu = null;
+    ScoreViewer scoreView = null;
+
+    public static int score = 0;
 	
     /**
      * First Start Stage
@@ -83,6 +87,7 @@ public class SandboxPluginService extends AbstractPluginService {
 		LiveViewActivity.setup(context);
 		board = new GameBoard();
 		mMenu = new MainMenu ();
+		scoreView = new ScoreViewer();
 	}
 	
 	/**
@@ -166,15 +171,7 @@ public class SandboxPluginService extends AbstractPluginService {
 	 * Must be implemented. Starts plugin work, if any.
 	 */
 	protected void startWork() {
-            try {
-                mLiveViewAdapter.clearDisplay(mPluginId);
-            } catch(Exception e) {
-                Log.e(PluginConstants.LOG_TAG, "Failed to clear display.");
-            }
-            
-            //TODO - Impliment menu here
             mMenu.draw();
-                
 	}
 	
 	/**
@@ -218,11 +215,17 @@ public class SandboxPluginService extends AbstractPluginService {
 		            board.draw();
 	            	
 	            }
+	            else if(mMenu.getSelected() == MainMenu.SCORES)
+	            {
+		            currentWorker=workers.SCOREVIEW;
+		            scoreView.draw();
+	            	
+	            }
 			}
 			
 	    	break;
 	    
-	    case GAMEBOARD:
+	    case GAMEBOARD: 
 		    
 			if(buttonType.equalsIgnoreCase(PluginConstants.BUTTON_UP)) 
 			{
@@ -251,6 +254,20 @@ public class SandboxPluginService extends AbstractPluginService {
 	            mMenu.draw();
 			}
 	    	
+	    	break;
+	    	
+	    case SCOREVIEW:
+
+			if(buttonType.equalsIgnoreCase(PluginConstants.BUTTON_UP)) 
+			{
+				scoreView.draw();
+			}
+			else if(buttonType.equalsIgnoreCase(PluginConstants.BUTTON_SELECT)) 
+			{
+	            rumble(PluginConstants.RUMBLE_SHORT);
+	            currentWorker=workers.MAINMENU;
+	            mMenu.draw();
+			}
 	    	break;
 	    }
 	}

@@ -17,6 +17,7 @@ public class MainMenu extends LiveViewActivity {
 			selectorScores,
 			currentSelector;
     Paint paint = new Paint();
+    
 	
 	public final static int 
 		START = 0,
