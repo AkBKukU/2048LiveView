@@ -8,6 +8,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.util.Log;
 
+import com.sonyericsson.extras.liveview.plugins.AbstractPluginService;
 import com.sonyericsson.extras.liveview.plugins.LiveViewAdapter;
 import com.sonyericsson.extras.liveview.plugins.PluginConstants;
 
@@ -51,9 +52,8 @@ public class GameBoard extends LiveViewActivity{
 	 * @param mPluginId
 	 * @param context
 	 */
-	public GameBoard(LiveViewAdapter mLiveViewAdapter, int mPluginId, Context context)
+	public GameBoard()
 	{
-		super(mLiveViewAdapter, mPluginId, context);
 		newGame();
 
 	    // Get bitmaps
@@ -61,15 +61,15 @@ public class GameBoard extends LiveViewActivity{
 	}
 	
 	/**
-	 * draw
+	 * buildImage
 	 * 
 	 * Draws current pieces to the LiveView's screen
 	 */
 	@Override
-	public void draw()
+	public void buildImage()
 	{
 		// Print Background
-        mLiveViewAdapter.sendImageAsBitmap(mPluginId, 0, 0, background);
+		canvas.drawBitmap(background, 0, 0,null);
 		
         // Go through array and print a pieces with a non-zero value
         for (int x=0;x < 4;x++)
@@ -79,7 +79,7 @@ public class GameBoard extends LiveViewActivity{
 				if (boardValues[y][x] != 0)
 				{
 					// Gets value and prints the image for it at the location stored in the pixel location array
-                    mLiveViewAdapter.sendImageAsBitmap(mPluginId, GameBoard.gridPX[y][x][0],GameBoard.gridPX[y][x][1], getBitmap(boardValues[y][x]));
+					canvas.drawBitmap(getBitmap(boardValues[y][x]), GameBoard.gridPX[y][x][0],GameBoard.gridPX[y][x][1], null );
 					
 				}
 			}

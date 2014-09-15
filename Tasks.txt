@@ -1,4 +1,5 @@
 Performance improvments
 
-1: Draw only hen needed
-	Keep what the screen curently has drawn in a var and compare to what to draw. Only draw things that have changed.
+1: Write bitmaps to canvas to only send one image to liveview for perfect performace
+Bitmap b = Bitmap.createBitmap(100, 100, Bitmap.Config.ARGB_8888);
+Canvas c = new Canvas(b);

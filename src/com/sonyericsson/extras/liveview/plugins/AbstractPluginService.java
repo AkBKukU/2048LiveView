@@ -53,10 +53,10 @@ public abstract class AbstractPluginService extends Service {
     protected String mPluginName = null;
 
     // Current plugin Id
-    protected int mPluginId = 0;
+    public static  int mPluginId = 0;
 
     // LiveView adapter reference
-    protected LiveViewAdapter mLiveViewAdapter = null;
+    public static LiveViewAdapter mLiveViewAdapter = null;
 
     // Menu icon that will be shown in LiveView unit
     protected String mMenuIcon = null;

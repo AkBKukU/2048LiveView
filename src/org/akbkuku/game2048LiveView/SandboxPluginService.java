@@ -39,14 +39,21 @@ public class SandboxPluginService extends AbstractPluginService {
     
 	Context context = this;
 	
-    private int MSG_TYPE_TIMER = 1;
-    private int MSG_TYPE_ROTATOR = 2;
+	
+	private enum workers 
+	{
+		MAINMENU,
+		GAMEBOARD
+	}
+	
+	private workers currentWorker = workers.MAINMENU;
     
     // Our handler.
     private Handler mHandler = null;
     
     // Game Logic
     GameBoard board = null;
+    MainMenu mMenu = null;
 	
     /**
      * First Start Stage
@@ -73,7 +80,9 @@ public class SandboxPluginService extends AbstractPluginService {
 		}
 		
 		// Load game board
-		board = new GameBoard(mLiveViewAdapter,mPluginId,context);
+		LiveViewActivity.setup(context);
+		board = new GameBoard();
+		mMenu = new MainMenu ();
 	}
 	
 	/**
@@ -157,21 +166,15 @@ public class SandboxPluginService extends AbstractPluginService {
 	 * Must be implemented. Starts plugin work, if any.
 	 */
 	protected void startWork() {
-	    if(!workerRunning()) {
-	        mHandler.postDelayed(new Runnable() {
-                public void run() {
-                    // First message to LiveView
-                    try {
-                        mLiveViewAdapter.clearDisplay(mPluginId);
-                    } catch(Exception e) {
-                        Log.e(PluginConstants.LOG_TAG, "Failed to clear display.");
-                    }
-                    
-                    //TODO - Impliment menu here
-                    board.draw();
-                }
-            }, 100);
-        }
+            try {
+                mLiveViewAdapter.clearDisplay(mPluginId);
+            } catch(Exception e) {
+                Log.e(PluginConstants.LOG_TAG, "Failed to clear display.");
+            }
+            
+            //TODO - Impliment menu here
+            mMenu.draw();
+                
 	}
 	
 	/**
@@ -191,33 +194,65 @@ public class SandboxPluginService extends AbstractPluginService {
 	protected void button(String buttonType, boolean doublepress, boolean longpress) {
 	    Log.d(PluginConstants.LOG_TAG, "button - type " + buttonType + ", doublepress " + doublepress + ", longpress " + longpress);
 		
+	    switch(currentWorker)
+	    {
+	    case MAINMENU:
+
+		    
+			if(buttonType.equalsIgnoreCase(PluginConstants.BUTTON_UP)) 
+			{
+				mMenu.select(MainMenu.START);
+				mMenu.draw();
+			}
+			else if(buttonType.equalsIgnoreCase(PluginConstants.BUTTON_DOWN)) 
+			{
+				mMenu.select(MainMenu.SCORES);
+				mMenu.draw();
+			} 
+			else if(buttonType.equalsIgnoreCase(PluginConstants.BUTTON_SELECT)) 
+			{
+	            rumble(PluginConstants.RUMBLE_SHORT);
+	            if(mMenu.getSelected() == MainMenu.START)
+	            {
+		            currentWorker=workers.GAMEBOARD;
+		            board.draw();
+	            	
+	            }
+			}
+			
+	    	break;
 	    
-		if(buttonType.equalsIgnoreCase(PluginConstants.BUTTON_UP)) 
-		{
-			board.slide(GameBoard.UP);
-            board.draw();
-		}
-		else if(buttonType.equalsIgnoreCase(PluginConstants.BUTTON_DOWN)) 
-		{
-			board.slide(GameBoard.DOWN);
-            board.draw();
-		} 
-		else if(buttonType.equalsIgnoreCase(PluginConstants.BUTTON_LEFT)) 
-		{
-			board.slide(GameBoard.LEFT);
-            board.draw();
-		} 
-		else if(buttonType.equalsIgnoreCase(PluginConstants.BUTTON_RIGHT)) 
-		{
-			board.slide(GameBoard.RIGHT);
-            board.draw();
-		} 
-		else if(buttonType.equalsIgnoreCase(PluginConstants.BUTTON_SELECT)) 
-		{
-            rumble(PluginConstants.RUMBLE_SHORT);
-            board.newGame();
-            board.draw();
-		}
+	    case GAMEBOARD:
+		    
+			if(buttonType.equalsIgnoreCase(PluginConstants.BUTTON_UP)) 
+			{
+				board.slide(GameBoard.UP);
+	            board.draw();
+			}
+			else if(buttonType.equalsIgnoreCase(PluginConstants.BUTTON_DOWN)) 
+			{
+				board.slide(GameBoard.DOWN);
+	            board.draw();
+			} 
+			else if(buttonType.equalsIgnoreCase(PluginConstants.BUTTON_LEFT)) 
+			{
+				board.slide(GameBoard.LEFT);
+	            board.draw();
+			} 
+			else if(buttonType.equalsIgnoreCase(PluginConstants.BUTTON_RIGHT)) 
+			{
+				board.slide(GameBoard.RIGHT);
+	            board.draw();
+			} 
+			else if(buttonType.equalsIgnoreCase(PluginConstants.BUTTON_SELECT)) 
+			{
+	            rumble(PluginConstants.RUMBLE_SHORT);
+	            currentWorker=workers.MAINMENU;
+	            mMenu.draw();
+			}
+	    	
+	    	break;
+	    }
 	}
 
 	protected void displayCaps(int displayWidthPx, int displayHeigthPx) {
@@ -265,16 +300,5 @@ public class SandboxPluginService extends AbstractPluginService {
     private void startUpdates() {
     }
     
-    private boolean timersOnQueue() {
-        return mHandler.hasMessages(MSG_TYPE_TIMER);
-    }
-    
-    private boolean rotatorsOnQueue() {
-        return mHandler.hasMessages(MSG_TYPE_ROTATOR);
-    }
-    
-    private boolean workerRunning() {
-        return (rotatorsOnQueue() || timersOnQueue());
-    }
     
 }
