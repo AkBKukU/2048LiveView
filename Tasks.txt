@@ -12,7 +12,7 @@ TODO!
 DONE - Save High Score
 DONE* - Make Tiles easier to read
 fix game end
-only add new pieces when change was made
+DONE - only add new pieces when change was made
 
 
 

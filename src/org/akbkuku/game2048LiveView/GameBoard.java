@@ -202,7 +202,10 @@ public class GameBoard extends LiveViewActivity{
 	public void slide(int direction)
 	{
 
-	    int tempBoard[][] = (int[][])boardValues.clone();
+	    int tempBoard[][] = new int[boardValues.length][];
+	    for (int r = 0; r < boardValues.length; r++) {
+	    	tempBoard[r] = boardValues[r].clone();
+	    }
 		switch (direction)
 		{
 			case GameBoard.UP:
@@ -223,7 +226,7 @@ public class GameBoard extends LiveViewActivity{
 				break;
 		}
 		//TODO - Need to test that a move was made before adding
-		boolean moveMade = true;
+		boolean moveNotMade = true;
 
 		for (int x=0;x < 4;x++)
 		{
@@ -233,12 +236,12 @@ public class GameBoard extends LiveViewActivity{
 				{
 					if (tempBoard[y][x] != boardValues[y][x])
 					{
-						moveMade = false;
+						moveNotMade = false;
 					}
 				}
 			}
 		}
-		if (moveMade)
+		if (!moveNotMade)
 		{
 		    Log.d(PluginConstants.LOG_TAG_GAME, "A Move was made");	
 			addPiece();
