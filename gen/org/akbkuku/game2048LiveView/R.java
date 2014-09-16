@@ -39,13 +39,19 @@ public final class R {
     public static final class string {
         public static final int app_name=0x7f050000;
         public static final int application_description=0x7f050004;
+        public static final int gameboard_gameover=0x7f05000a;
         public static final int intent_preferences=0x7f050002;
         public static final int intent_service=0x7f050003;
+        public static final int menu_resume=0x7f050006;
+        public static final int menu_scores=0x7f050007;
+        public static final int menu_start=0x7f050005;
         /**  
     	The following strings needs to be defined in order for the Plugin to function.
     
          */
         public static final int pluginname=0x7f050001;
+        public static final int scores_current=0x7f050008;
+        public static final int scores_highest=0x7f050009;
     }
     public static final class xml {
         public static final int preferences=0x7f040000;

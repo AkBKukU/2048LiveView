@@ -67,16 +67,16 @@ public class MainMenu extends LiveViewActivity {
 		String startText = "Start";
 		if (SandboxPluginService.score != 0)
 		{
-			startText = "Resume";
+			startText = context.getResources().getString(R.string.menu_resume);
 		}
 		if(GameBoard.gameover)
 		{
-			startText = "Start";
+			startText = context.getResources().getString(R.string.menu_start);
 		}
 		
 		// Print text on the buttons
 		canvas.drawText(startText, 64, 69, paint);
-		canvas.drawText("Scores", 64, 106, paint);
+		canvas.drawText(context.getResources().getString(R.string.menu_scores), 64, 106, paint);
 	    
 		// Print the selector
 		canvas.drawBitmap(currentSelector, 4, 60, paint);

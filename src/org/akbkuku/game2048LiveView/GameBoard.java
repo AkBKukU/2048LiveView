@@ -105,7 +105,7 @@ public class GameBoard extends LiveViewActivity{
     		paint.setColor(Color.WHITE); 
     		paint.setTextSize(20); 
     		paint.setTextAlign(Align.CENTER);
-    		canvas.drawText("Game Over", 64, 72, paint);
+    		canvas.drawText(context.getResources().getString(R.string.gameboard_gameover), 64, 72, paint);
         }
 	}
 	

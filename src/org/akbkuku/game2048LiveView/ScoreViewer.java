@@ -25,14 +25,15 @@ public class ScoreViewer extends LiveViewActivity{
 		paint.setTextAlign(Align.CENTER);
 		paint.setTextSize(18); 
 	    
-		// TODO Auto-generated method stub 
+		// Draw current score 
 		paint.setColor(Color.argb(255, 120, 110, 100)); 
-		canvas.drawText("Current", 64, 26, paint);
+		canvas.drawText(context.getResources().getString(R.string.scores_current), 64, 26, paint);
 		paint.setColor(Color.WHITE); 
 		canvas.drawText(""+SandboxPluginService.score, 64, 50, paint);
-
+		
+		// Draw high score
 		paint.setColor(Color.argb(255, 120, 110, 100)); 
-		canvas.drawText("Highest", 64, 82, paint);
+		canvas.drawText(context.getResources().getString(R.string.scores_highest), 64, 82, paint);
 		paint.setColor(Color.WHITE); 
 		canvas.drawText(""+SandboxPluginService.highScore, 64, 105, paint);
 		
