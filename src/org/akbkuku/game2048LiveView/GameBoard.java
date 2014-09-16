@@ -3,7 +3,6 @@ package org.akbkuku.game2048LiveView;
 import java.util.ArrayList;
 import java.util.Random;
 
-import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
@@ -12,8 +11,6 @@ import android.graphics.Paint.Align;
 import android.graphics.Paint.Style;
 import android.util.Log;
 
-import com.sonyericsson.extras.liveview.plugins.AbstractPluginService;
-import com.sonyericsson.extras.liveview.plugins.LiveViewAdapter;
 import com.sonyericsson.extras.liveview.plugins.PluginConstants;
 
 public class GameBoard extends LiveViewActivity{
@@ -61,6 +58,7 @@ public class GameBoard extends LiveViewActivity{
 	 */
 	public GameBoard()
 	{
+		// Load game values
 		newGame();
 
 	    // Get bitmaps
@@ -70,7 +68,7 @@ public class GameBoard extends LiveViewActivity{
 	/**
 	 * buildImage
 	 * 
-	 * Draws current pieces to the LiveView's screen
+	 * Builds an image of current pieces
 	 */
 	@Override
 	public void buildImage()
@@ -92,13 +90,18 @@ public class GameBoard extends LiveViewActivity{
 			}
 		}
         
+        // Tint screen yellow and display gameover text
         if(gameover)
         {
     	    Log.d(PluginConstants.LOG_TAG_GAME, "--Game Over--");
+    	    
+    	    // Yellow tint
         	Paint paint = new Paint();
         	paint.setARGB(125, 200, 200, 25);
         	paint.setStyle(Style.FILL);
         	canvas.drawPaint(paint);
+        	
+        	// Gameover text
     		paint.setColor(Color.WHITE); 
     		paint.setTextSize(20); 
     		paint.setTextAlign(Align.CENTER);
@@ -109,7 +112,7 @@ public class GameBoard extends LiveViewActivity{
 	/**
 	 * newGame
 	 * 
-	 * Callsto reset the board and add two random pieces
+	 * Calls to reset the board and add two random pieces
 	 */
 	public void newGame()
 	{
@@ -119,7 +122,6 @@ public class GameBoard extends LiveViewActivity{
 		addPiece();
 		
 		SandboxPluginService.score=0;
-		
 		gameover = false;
 	}
 	
@@ -225,10 +227,13 @@ public class GameBoard extends LiveViewActivity{
 	 */
 	public void slide(int direction)
 	{
+		// Duplicate board
 	    int tempBoard[][] = new int[boardValues.length][];
 	    for (int r = 0; r < boardValues.length; r++) {
 	    	tempBoard[r] = boardValues[r].clone();
 	    }
+	    
+	    // Determine movement direction and call moveAll
 		switch (direction)
 		{
 			case GameBoard.UP:
@@ -248,9 +253,9 @@ public class GameBoard extends LiveViewActivity{
 				moveAll(1,0);
 				break;
 		}
-		//TODO - Need to test that a move was made before adding
+		
+		// Test that a move was made
 		boolean moveNotMade = true;
-
 		for (int x=0;x < 4;x++)
 		{
 			for (int y=0;y < 4;y++)
@@ -264,19 +269,26 @@ public class GameBoard extends LiveViewActivity{
 				}
 			}
 		}
+		
+		// Add piece if move was made
 		if (!moveNotMade)
 		{
 		    Log.d(PluginConstants.LOG_TAG_GAME, "A Move was made");	
 			addPiece();
 		}
+		
+		// Check if board is locked up 
 		else if (moveNotMade && empties.size() == 0)
 		{
 		    Log.d(PluginConstants.LOG_TAG_GAME, "Out of empty Spaces");
+		    
+		    // Run through all moves
 			moveAll(0,-1);
 			moveAll(0,1);
 			moveAll(-1,0);
 			moveAll(1,0);
 			
+			// Check if a move was successful 
 			moveNotMade = true;
 			for (int x=0;x < 4;x++)
 			{
@@ -291,10 +303,14 @@ public class GameBoard extends LiveViewActivity{
 					}
 				}
 			}
+			
+			// Set gameover if the board can't move
 			if (moveNotMade)
 			{
 				gameover = true;
 			}
+			
+			// Restore board to original condition if a move can be made
 			else
 			{
 			    for (int r = 0; r < tempBoard.length; r++) {
@@ -317,6 +333,7 @@ public class GameBoard extends LiveViewActivity{
 	 */
 	private void moveAll(int xM, int yM)
 	{
+		// Move Right
 		if (xM == 1 && yM == 0)
 		{
 			for (int x=3;x > -1;x--)
@@ -328,6 +345,7 @@ public class GameBoard extends LiveViewActivity{
 				
 			}
 		}
+		// Move Left
 		else if (xM == -1 && yM == 0)
 		{
 			for (int x=0;x < 4;x++)
@@ -339,6 +357,7 @@ public class GameBoard extends LiveViewActivity{
 				
 			}
 		}
+		// Move Up
 		else if (xM == 0 && yM == -1)
 		{
 			for (int x=3;x > -1;x--)
@@ -350,6 +369,7 @@ public class GameBoard extends LiveViewActivity{
 				
 			}
 		}
+		// Move Down
 		else if (xM == 0 && yM == 1)
 		{
 			for (int x=0;x < 4;x++)
@@ -364,6 +384,16 @@ public class GameBoard extends LiveViewActivity{
 		
 	}
 	
+	/**
+	 * moveOne
+	 * 
+	 * Moves one piece by the modifiers
+	 * 
+	 * @param x
+	 * @param y
+	 * @param xM
+	 * @param yM
+	 */
 	private void moveOne (int x, int y, int xM, int yM)
 	{
 		// Check if empty

@@ -25,7 +25,6 @@ package org.akbkuku.game2048LiveView;
 
 import com.sonyericsson.extras.liveview.plugins.AbstractPluginService;
 import com.sonyericsson.extras.liveview.plugins.PluginConstants;
-import com.sonyericsson.extras.liveview.plugins.PluginUtils;
 
 import android.content.ComponentName;
 import android.content.Context;
@@ -42,6 +41,7 @@ public class SandboxPluginService extends AbstractPluginService {
 	SharedPreferences sharedPref;
 	SharedPreferences.Editor editor;
 	
+	// Enum for activities
 	private enum workers 
 	{
 		MAINMENU,
@@ -49,6 +49,7 @@ public class SandboxPluginService extends AbstractPluginService {
 		SCOREVIEW
 	}
 	
+	// Set default activity
 	private workers currentWorker = workers.MAINMENU;
     
     // Our handler.
@@ -59,6 +60,7 @@ public class SandboxPluginService extends AbstractPluginService {
     MainMenu mMenu = null;
     ScoreViewer scoreView = null;
 
+    // Score values
     public static int score = 0,
     				highScore = 0;
 	
@@ -85,12 +87,14 @@ public class SandboxPluginService extends AbstractPluginService {
 		if(mHandler == null) {
 		    mHandler = new Handler();
 		}
+		
+		// Load high score from file
 		sharedPref = context.getSharedPreferences("org.akbkuku.highScore", Context.MODE_PRIVATE);
 		editor = sharedPref.edit();
 		score = 0;
 		highScore = sharedPref.getInt("high_score", highScore);
 		
-		// Load game board
+		// Load activities
 		LiveViewActivity.setup(context);
 		board = new GameBoard();
 		mMenu = new MainMenu ();
@@ -206,11 +210,11 @@ public class SandboxPluginService extends AbstractPluginService {
 	    	highScore = score;
 	    }
 	    
+	    // Send input to current activity
 	    switch(currentWorker)
 	    {
+	    
 	    case MAINMENU:
-
-		    
 			if(buttonType.equalsIgnoreCase(PluginConstants.BUTTON_UP)) 
 			{
 				mMenu.select(MainMenu.START);
@@ -224,8 +228,11 @@ public class SandboxPluginService extends AbstractPluginService {
 			else if(buttonType.equalsIgnoreCase(PluginConstants.BUTTON_SELECT)) 
 			{
 	            rumble(PluginConstants.RUMBLE_SHORT);
+	            
+	            // Open selected activity 
 	            if(mMenu.getSelected() == MainMenu.START)
 	            {
+	            	// Check if game is over and reset if it is
 		            currentWorker=workers.GAMEBOARD;
 		    		if(GameBoard.gameover)
 		    		{
@@ -310,8 +317,6 @@ public class SandboxPluginService extends AbstractPluginService {
         if(mode == PluginConstants.LIVE_SCREEN_MODE_ON) {
             startUpdates();
         } else {
-        	
-        	//TODO-Create save of board for continuing game
         	
             stopUpdates();
         }
