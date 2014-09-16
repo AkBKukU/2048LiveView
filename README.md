@@ -16,5 +16,5 @@ I experience connection issues while using the plugin for long periods of time, 
 
 
 ###Installation###
-Download [2048 LiveView.apk](https://github.com/AkBKukU/2048LiveView/raw/master/bin/2048%20LiveView.apk) from the bin folder and install it on your device.
+Download [2048 LiveView.apk](https://github.com/AkBKukU/2048LiveView/releases/download/1.0/2048.LiveView.apk) from the bin folder and install it on your device.
 It should then show up in the plugins folder on your LiveView. 
