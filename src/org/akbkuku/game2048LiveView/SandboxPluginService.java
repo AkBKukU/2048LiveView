@@ -227,6 +227,10 @@ public class SandboxPluginService extends AbstractPluginService {
 	            if(mMenu.getSelected() == MainMenu.START)
 	            {
 		            currentWorker=workers.GAMEBOARD;
+		    		if(GameBoard.gameover)
+		    		{
+			            board.newGame();
+		    		}
 		            board.draw();
 	            	
 	            }

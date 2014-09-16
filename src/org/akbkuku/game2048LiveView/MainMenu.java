@@ -65,6 +65,10 @@ public class MainMenu extends LiveViewActivity {
 		{
 			startText = "Resume";
 		}
+		if(GameBoard.gameover)
+		{
+			startText = "Start";
+		}
 		canvas.drawText(startText, 64, 69, paint);
 		canvas.drawText("Scores", 64, 106, paint);
 	    

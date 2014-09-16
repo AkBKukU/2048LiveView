@@ -6,6 +6,10 @@ import java.util.Random;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
+import android.graphics.Paint;
+import android.graphics.Paint.Align;
+import android.graphics.Paint.Style;
 import android.util.Log;
 
 import com.sonyericsson.extras.liveview.plugins.AbstractPluginService;
@@ -42,6 +46,9 @@ public class GameBoard extends LiveViewActivity{
 	
 	// Bitmaps
 	Bitmap background;
+	
+	// Gameover status
+	public static boolean gameover = false;
 
 	/**
 	 * GameBoard
@@ -84,6 +91,19 @@ public class GameBoard extends LiveViewActivity{
 				}
 			}
 		}
+        
+        if(gameover)
+        {
+    	    Log.d(PluginConstants.LOG_TAG_GAME, "--Game Over--");
+        	Paint paint = new Paint();
+        	paint.setARGB(125, 200, 200, 25);
+        	paint.setStyle(Style.FILL);
+        	canvas.drawPaint(paint);
+    		paint.setColor(Color.WHITE); 
+    		paint.setTextSize(20); 
+    		paint.setTextAlign(Align.CENTER);
+    		canvas.drawText("Game Over", 64, 72, paint);
+        }
 	}
 	
 	/**
@@ -97,6 +117,10 @@ public class GameBoard extends LiveViewActivity{
 		reset();
 		addPiece();
 		addPiece();
+		
+		SandboxPluginService.score=0;
+		
+		gameover = false;
 	}
 	
 	/**
@@ -154,7 +178,7 @@ public class GameBoard extends LiveViewActivity{
 	 */
 	private boolean addPiece()
 	{
-	    Log.d(PluginConstants.LOG_TAG_GAME, "Adding new piece");
+	    Log.d(PluginConstants.LOG_TAG_GAME, "Adding new piece: "+empties.size()+" empty spaces left");
 
 		// Check for empty spaces to 
 	    getEmpties();
@@ -201,7 +225,6 @@ public class GameBoard extends LiveViewActivity{
 	 */
 	public void slide(int direction)
 	{
-
 	    int tempBoard[][] = new int[boardValues.length][];
 	    for (int r = 0; r < boardValues.length; r++) {
 	    	tempBoard[r] = boardValues[r].clone();
@@ -246,6 +269,42 @@ public class GameBoard extends LiveViewActivity{
 		    Log.d(PluginConstants.LOG_TAG_GAME, "A Move was made");	
 			addPiece();
 		}
+		else if (moveNotMade && empties.size() == 0)
+		{
+		    Log.d(PluginConstants.LOG_TAG_GAME, "Out of empty Spaces");
+			moveAll(0,-1);
+			moveAll(0,1);
+			moveAll(-1,0);
+			moveAll(1,0);
+			
+			moveNotMade = true;
+			for (int x=0;x < 4;x++)
+			{
+				for (int y=0;y < 4;y++)
+				{
+					if (boardValues[y][x] == 0)
+					{
+						if (tempBoard[y][x] != boardValues[y][x])
+						{
+							moveNotMade = false;
+						}
+					}
+				}
+			}
+			if (moveNotMade)
+			{
+				gameover = true;
+			}
+			else
+			{
+			    for (int r = 0; r < tempBoard.length; r++) {
+			    	boardValues[r] = tempBoard[r].clone();
+			    }
+				
+			}
+	    }
+		
+		
 	}
 	
 	/**
